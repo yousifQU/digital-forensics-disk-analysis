@@ -1,63 +1,85 @@
-# Digital Forensics Case Studies
+# Case Report 03 — Crime Scene Seizure: Bag & Tag
 
-Hands-on digital forensics work completed during a university Digital Forensics course (Spring 2025). It covers evidence acquisition, integrity verification, crime-scene handling, file-system analysis and data-hiding detection, done on training images and mock cases in a lab environment.
+[← Back to portfolio overview](https://github.com/yousifQU/digital-forensics-disk-analysis)
 
-> **Disclaimer:** I am not the sole owner of this work. These projects come from university lab assignments. Some were done in pairs or groups, and all of them were built on scenarios, evidence images and instructions designed by the course instructors. The write-ups here are my own summaries of that work. All names, institutions, course identifiers, case numbers, passwords and other identifying details have been removed or replaced with generic descriptions. Every case is a fictional training scenario.
+> University coursework, anonymized. Completed as a team of four. Not solely my own work; the scenario was designed by the course instructors and is entirely fictional. All names and locations are generalized.
+
+| Field | Detail |
+|-------|--------|
+| **Case type** | Physical seizure, acquisition and analysis of a suspect's workstation |
+| **Period** | Spring 2025, early February |
+| **Format** | Team lab (4 members) |
+| **My role** | Report Writer |
+| **Legal basis** | Search and seizure authorized by a judge on probable cause (mock affidavit and warrant) |
+| **Evidence** | Suspect workstation and its internal SSD |
+| **Tools** | Hardware write blocker, FTK Imager, Windows Explorer |
 
 ---
 
-## Executive Summary
+## 1. Objective
+Seize a suspect's computer from a controlled crime scene following proper evidence-handling procedure, acquire its drive forensically, and determine how a planned attack was meant to be carried out.
 
-Across one semester I worked through the core digital forensics workflow, from seizing a device at a mock crime scene to presenting findings that would hold up to review:
+## 2. Scenario
+An anonymous tip reported that a group of students planned two actions:
+- break into several campus computer labs and push propaganda posters to the machines
+- run an executable on those machines to launch a **denial-of-service (DoS) attack against the department's network routers**
 
-- **Acquire.** I created logical and physical forensic images in E01 and RAW formats, using FTK Imager, Magnet AXIOM and `dd`, with and without hardware write blockers.
-- **Verify.** I used MD5 and SHA-1 hashing to prove each image matched its source. In one exercise this exposed a forensic image whose hash did not match the original examiner's report.
-- **Handle.** I took part in a mock seizure: assigning team roles, keeping a crime-scene entry log and a chain-of-custody form, and bagging and tagging the evidence.
-- **Analyze.** I recovered evidence from allocated space, encrypted archives, renamed files and hidden locations, using Magnet AXIOM, Autopsy and FTK Imager.
-- **Detect concealment.** I identified more than ten data-hiding techniques, including steganography, extension spoofing, Windows folder tricks, Office-file internals and password protection.
-- **Report.** I wrote findings for both technical and non-technical readers, and acted as the team's report writer in the group seizure case.
+One member's workstation was seized under a warrant. The scene was taped off to simulate an active investigation.
 
-## Projects
+## 3. Team Roles
 
-Each project is written up on its own branch as **Situation → What I did → Results**.
+| Role | Responsibility |
+|------|----------------|
+| Investigator / Digital Evidence Analyst | Directed the scene, analyzed the drive (allocated and unallocated space), signed the chain-of-custody form |
+| Photographer / Event Recorder | Photographed the scene and evidence, maintained the crime-scene entry log |
+| Imager / Acquisition Expert | Imaged the seized SSD with FTK Imager |
+| **Report Writer (me)** | Compiled findings into a report readable by technical and non-technical (legal/administrative) audiences |
 
-| # | Project | Focus | Branch |
-|---|---------|-------|--------|
-| 1 | Forensic Acquisition & Hash Verification | Logical vs. physical imaging, E01 vs. RAW, cross-tool hash validation | [`project/01-forensic-acquisition`](../../tree/project/01-forensic-acquisition) |
-| 2 | Evidence Integrity Review (Expert Witness) | Reviewing another examiner's report, `dd` imaging, `certutil` hashing, Autopsy | [`project/02-evidence-integrity-review`](../../tree/project/02-evidence-integrity-review) |
-| 3 | Crime Scene Seizure: Bag & Tag | Team seizure, chain of custody, write-blocked physical imaging, case analysis | [`project/03-crime-scene-seizure`](../../tree/project/03-crime-scene-seizure) |
-| 4 | Contraband Image Investigation | Large-scale artifact identification, hidden image recovery, file signature analysis | [`project/04-contraband-image-investigation`](../../tree/project/04-contraband-image-investigation) |
-| 5 | Data Hiding Detection | Finding keys hidden with 10+ concealment techniques | [`project/05-data-hiding-analysis`](../../tree/project/05-data-hiding-analysis) |
+## 4. Methodology
 
-See [TOOLS_AND_SKILLS.md](TOOLS_AND_SKILLS.md) for the full tool list and skill breakdown.
+| Phase | Action |
+|-------|--------|
+| Scene control | Logged every person entering and leaving the scene with times; photographed the scene before anything was touched |
+| Seizure | Identified the workstation and its SSD as evidence; assigned each item a case number and evidence ID |
+| Preservation | Bagged and tagged each item; recorded each transfer on a chain-of-custody form (released by / received by, date, time) |
+| Acquisition | Connected the SSD through a hardware write blocker; copied the user's home folder for quick triage; created a **physical E01 image** in FTK Imager and recorded its hash values |
+| Analysis | Examined the user profile and archives for files related to the planned attack; opened encrypted archives with passwords found during the investigation |
+| Reporting | Documented findings, case assessment and the evidence linking the suspect to the plan |
 
-## Timeline
+## 5. Findings
 
-All work was completed in a single spring semester, in this order:
+| ID | Item (generalized) | Location | Significance |
+|----|--------------------|----------|--------------|
+| F1 | Executable named after the planned operation | Desktop | Matches the program described for the DoS attack |
+| F2 | Unencrypted spreadsheet message log | Documents | Coded log used to coordinate the group; references the start of the operation |
+| F3 | Encrypted member list (ZIP) | Documents | Lists members and their roles; names the suspect as leader |
+| F4 | Encrypted personal notes (ZIP) | Rarely used profile folder | Meeting dates, recruitment, and the attack method (flooding the routers with traffic) |
+| F5 | Poster archive (ZIP) | Custom folder in the profile | Propaganda intended for the lab computers |
 
-| When | Work | Status |
-|------|------|--------|
-| Late January | Project 1: Forensic acquisition with FTK Imager & Magnet AXIOM | Written up |
-| Late January | Project 2: Evidence integrity review (paired lab) | Written up |
-| Early February | Project 3: Crime scene seizure (team of four) | Written up |
-| Mid-semester | Project 4: Contraband image investigation | Written up |
-| Early April | Project 5: Data hiding detection | Written up |
-| April | Linux image analysis with Kali Linux and legacy Autopsy/Sleuth Kit | Exposure only (not written up) |
-| May | Mobile forensics: Android with Cellebrite UFED Reader, iOS backup with Magnet AXIOM | Exposure only (not written up) |
+## 6. Case Assessment
+**Reconstructed timeline (from the notes and logs):**
+1. The group formed and the suspect took the leader role.
+2. Members were recruited and regular meetings were held.
+3. The posters and the attack executable were prepared.
+4. The operation was scheduled to start: push the posters to lab machines and run the executable to flood the routers.
 
-The last two exercises are listed for completeness. They are not written up as projects because I don't have complete records of the results.
+**Motive:**
+- spread the group's message across campus
+- show off the group's technical capability
 
-## Core Tools at a Glance
+**Potential offenses:**
+- conspiracy to violate the **Computer Fraud and Abuse Act (18 U.S.C. § 1030)**
+- violations of the institution's acceptable-use policy
 
-`FTK Imager` · `Magnet AXIOM` · `Autopsy / The Sleuth Kit` · `dd` · `certutil` · `Hardware write blocker` · `S-Tools` · `TinEye` · `Kali Linux` · `Oracle VirtualBox` · `Cellebrite UFED Reader` · `Windows Disk Management` · `WMIC`
+**Strongest evidence:**
+- F4, the notes describing the attack plan
+- F3, the member list naming the suspect as leader
+- F1, the executable itself
 
-## Repository Layout
+Together these show both intent and preparation.
 
-```
-main
-├── README.md               ← you are here
-└── TOOLS_AND_SKILLS.md     ← tools, skills and concepts
+## 7. Conclusion
+The evidence was seized, documented and acquired without altering the original drive. The recovered files support the conclusion that the suspect led the planned attack. The documentation (entry log, photographs, chain of custody and hash values) supports the evidence's admissibility.
 
-project/0X-* branches
-└── projects/<name>/README.md   ← one case study per branch
-```
+## 8. Skills Demonstrated
+Crime-scene procedure · chain of custody · evidence bagging and tagging · write-blocked physical imaging · encrypted-archive analysis · case reconstruction · report writing for legal audiences
