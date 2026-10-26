@@ -1,63 +1,56 @@
-# Digital Forensics Case Studies
+# Case Report 01 — Forensic Acquisition & Hash Verification
 
-Hands-on digital forensics work completed during a university Digital Forensics course (Spring 2025). It covers evidence acquisition, integrity verification, crime-scene handling, file-system analysis and data-hiding detection, done on training images and mock cases in a lab environment.
+[← Back to portfolio overview](https://github.com/yousifQU/digital-forensics-disk-analysis)
 
-> **Disclaimer:** I am not the sole owner of this work. These projects come from university lab assignments. Some were done in pairs or groups, and all of them were built on scenarios, evidence images and instructions designed by the course instructors. The write-ups here are my own summaries of that work. All names, institutions, course identifiers, case numbers, passwords and other identifying details have been removed or replaced with generic descriptions. Every case is a fictional training scenario.
+> University coursework, anonymized. Not solely my own work; the scenario and lab design belong to the course instructors.
+
+| Field | Detail |
+|-------|--------|
+| **Case type** | Evidence acquisition exercise |
+| **Period** | Spring 2025, late January |
+| **Format** | Individual lab |
+| **Evidence** | One USB flash drive (~8 GB device, ~50 MB FAT16 volume) |
+| **Tools** | FTK Imager, Magnet AXIOM (Process & Examine), WMIC, Windows Disk Management |
+| **Hash algorithms** | MD5, SHA-1 |
 
 ---
 
-## Executive Summary
+## 1. Objective
+Acquire a storage device in several defensible ways, verify every image with hashes, and explain why hash values match or differ between imaging methods.
 
-Across one semester I worked through the core digital forensics workflow, from seizing a device at a mock crime scene to presenting findings that would hold up to review:
+## 2. Scenario
+A USB drive is treated as a piece of evidence. Before analysis, the examiner has to document the device, create forensic images with more than one tool, and prove that each image is an exact copy of what it claims to represent.
 
-- **Acquire.** I created logical and physical forensic images in E01 and RAW formats, using FTK Imager, Magnet AXIOM and `dd`, with and without hardware write blockers.
-- **Verify.** I used MD5 and SHA-1 hashing to prove each image matched its source. In one exercise this exposed a forensic image whose hash did not match the original examiner's report.
-- **Handle.** I took part in a mock seizure: assigning team roles, keeping a crime-scene entry log and a chain-of-custody form, and bagging and tagging the evidence.
-- **Analyze.** I recovered evidence from allocated space, encrypted archives, renamed files and hidden locations, using Magnet AXIOM, Autopsy and FTK Imager.
-- **Detect concealment.** I identified more than ten data-hiding techniques, including steganography, extension spoofing, Windows folder tricks, Office-file internals and password protection.
-- **Report.** I wrote findings for both technical and non-technical readers, and acted as the team's report writer in the group seizure case.
+## 3. Methodology
 
-## Projects
+| Step | Action | Purpose |
+|------|--------|---------|
+| 1 | Formatted the drive and loaded four known test files (image, spreadsheet, document, presentation) | Create a controlled, known evidence set |
+| 2 | Recorded the drive's model, serial number, size and partitions (`wmic diskdrive get ...`) and checked the letter and file system in Disk Management | Identify the device for the case record |
+| 3 | Created a case in Magnet AXIOM, processed the drive, and reviewed the parsed artifacts in AXIOM Examine | Confirm the tool finds the known files |
+| 4 | Acquired the drive with Magnet AXIOM (E01, MD5 + SHA-1, image verification on) | First acquisition |
+| 5 | Acquired with FTK Imager: logical E01, logical RAW, then a full physical image (no fragmentation, no compression) | Compare formats and scopes |
+| 6 | Compared the computed and verification hashes of every image | Prove integrity and validate across tools |
 
-Each project is written up on its own branch as **Situation → What I did → Results**.
+## 4. Findings
 
-| # | Project | Focus | Branch |
-|---|---------|-------|--------|
-| 1 | Forensic Acquisition & Hash Verification | Logical vs. physical imaging, E01 vs. RAW, cross-tool hash validation | [`project/01-forensic-acquisition`](../../tree/project/01-forensic-acquisition) |
-| 2 | Evidence Integrity Review (Expert Witness) | Reviewing another examiner's report, `dd` imaging, `certutil` hashing, Autopsy | [`project/02-evidence-integrity-review`](../../tree/project/02-evidence-integrity-review) |
-| 3 | Crime Scene Seizure: Bag & Tag | Team seizure, chain of custody, write-blocked physical imaging, case analysis | [`project/03-crime-scene-seizure`](../../tree/project/03-crime-scene-seizure) |
-| 4 | Contraband Image Investigation | Large-scale artifact identification, hidden image recovery, file signature analysis | [`project/04-contraband-image-investigation`](../../tree/project/04-contraband-image-investigation) |
-| 5 | Data Hiding Detection | Finding keys hidden with 10+ concealment techniques | [`project/05-data-hiding-analysis`](../../tree/project/05-data-hiding-analysis) |
+| Image | Tool | Scope | Sectors (512 B) | Size | Hash verified |
+|-------|------|-------|-----------------|------|---------------|
+| A | FTK Imager | Logical, E01 | 102,400 | ~50 MB | ✅ |
+| B | FTK Imager | Logical, RAW | 102,400 | ~50 MB | ✅ (same as A) |
+| C | FTK Imager | Physical, E01 | 15,728,640 | ~8 GB | ✅ |
+| D | Magnet AXIOM | Physical, E01 | n/a | n/a | ✅ (same as C) |
 
-See [TOOLS_AND_SKILLS.md](TOOLS_AND_SKILLS.md) for the full tool list and skill breakdown.
+- All four test files were parsed in AXIOM. The tool also surfaced system and browser artifacts, such as a partial download file, that were not deliberately placed on the drive.
+- No bad blocks were reported in any acquisition.
 
-## Timeline
+## 5. Analysis
+- **A = B.** The image format doesn't change the hash. The hash is calculated over the acquired data, not over the E01 or RAW container.
+- **A ≠ C.** The logical image holds only the FAT16 volume. The physical image holds the whole device, including partition structures and unallocated space, so both the size and the hash differ.
+- **C = D.** Two independent tools produced the same hash for the same device. This cross-validates the acquisition and would hold up if either tool were questioned.
 
-All work was completed in a single spring semester, in this order:
+## 6. Conclusion
+Every image was verified against its source. Physical acquisition is the preferred method when deleted or unallocated data may matter, and validating with a second tool adds confidence at little cost.
 
-| When | Work | Status |
-|------|------|--------|
-| Late January | Project 1: Forensic acquisition with FTK Imager & Magnet AXIOM | Written up |
-| Late January | Project 2: Evidence integrity review (paired lab) | Written up |
-| Early February | Project 3: Crime scene seizure (team of four) | Written up |
-| Mid-semester | Project 4: Contraband image investigation | Written up |
-| Early April | Project 5: Data hiding detection | Written up |
-| April | Linux image analysis with Kali Linux and legacy Autopsy/Sleuth Kit | Exposure only (not written up) |
-| May | Mobile forensics: Android with Cellebrite UFED Reader, iOS backup with Magnet AXIOM | Exposure only (not written up) |
-
-The last two exercises are listed for completeness. They are not written up as projects because I don't have complete records of the results.
-
-## Core Tools at a Glance
-
-`FTK Imager` · `Magnet AXIOM` · `Autopsy / The Sleuth Kit` · `dd` · `certutil` · `Hardware write blocker` · `S-Tools` · `TinEye` · `Kali Linux` · `Oracle VirtualBox` · `Cellebrite UFED Reader` · `Windows Disk Management` · `WMIC`
-
-## Repository Layout
-
-```
-main
-├── README.md               ← you are here
-└── TOOLS_AND_SKILLS.md     ← tools, skills and concepts
-
-project/0X-* branches
-└── projects/<name>/README.md   ← one case study per branch
-```
+## 7. Skills Demonstrated
+Device documentation · logical vs. physical imaging · E01/RAW formats · MD5/SHA-1 verification · cross-tool validation
