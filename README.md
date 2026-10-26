@@ -19,15 +19,15 @@ Across one semester I worked through the core digital forensics workflow, from s
 
 ## Projects
 
-Each project is written up on its own branch as **Situation → What I did → Results**.
+Each project has its own branch, which opens on a short case report: objective, scenario, methodology, findings, analysis and conclusion. Click a branch link below to read it.
 
 | # | Project | Focus | Branch |
 |---|---------|-------|--------|
-| 1 | Forensic Acquisition & Hash Verification | Logical vs. physical imaging, E01 vs. RAW, cross-tool hash validation | [`project/01-forensic-acquisition`](../../tree/project/01-forensic-acquisition) |
-| 2 | Evidence Integrity Review (Expert Witness) | Reviewing another examiner's report, `dd` imaging, `certutil` hashing, Autopsy | [`project/02-evidence-integrity-review`](../../tree/project/02-evidence-integrity-review) |
-| 3 | Crime Scene Seizure: Bag & Tag | Team seizure, chain of custody, write-blocked physical imaging, case analysis | [`project/03-crime-scene-seizure`](../../tree/project/03-crime-scene-seizure) |
-| 4 | Contraband Image Investigation | Large-scale artifact identification, hidden image recovery, file signature analysis | [`project/04-contraband-image-investigation`](../../tree/project/04-contraband-image-investigation) |
-| 5 | Data Hiding Detection | Finding keys hidden with 10+ concealment techniques | [`project/05-data-hiding-analysis`](../../tree/project/05-data-hiding-analysis) |
+| 1 | Forensic Acquisition & Hash Verification | Logical vs. physical imaging, E01 vs. RAW, cross-tool hash validation | [`project/01-forensic-acquisition`](https://github.com/yousifQU/digital-forensics-disk-analysis/tree/project/01-forensic-acquisition) |
+| 2 | Evidence Integrity Review (Expert Witness) | Reviewing another examiner's report, `dd` imaging, `certutil` hashing, Autopsy | [`project/02-evidence-integrity-review`](https://github.com/yousifQU/digital-forensics-disk-analysis/tree/project/02-evidence-integrity-review) |
+| 3 | Crime Scene Seizure: Bag & Tag | Team seizure, chain of custody, write-blocked physical imaging, case analysis | [`project/03-crime-scene-seizure`](https://github.com/yousifQU/digital-forensics-disk-analysis/tree/project/03-crime-scene-seizure) |
+| 4 | Contraband Image Investigation | Large-scale artifact identification, hidden image recovery, file signature analysis | [`project/04-contraband-image-investigation`](https://github.com/yousifQU/digital-forensics-disk-analysis/tree/project/04-contraband-image-investigation) |
+| 5 | Data Hiding Detection | Finding keys hidden with 10+ concealment techniques | [`project/05-data-hiding-analysis`](https://github.com/yousifQU/digital-forensics-disk-analysis/tree/project/05-data-hiding-analysis) |
 
 See [TOOLS_AND_SKILLS.md](TOOLS_AND_SKILLS.md) for the full tool list and skill breakdown.
 
@@ -55,9 +55,9 @@ The last two exercises are listed for completeness. They are not written up as p
 
 ```
 main
-├── README.md               ← you are here
+├── README.md               ← portfolio overview (you are here)
 └── TOOLS_AND_SKILLS.md     ← tools, skills and concepts
 
 project/0X-* branches
-└── projects/<name>/README.md   ← one case study per branch
+└── README.md               ← the case report for that project
 ```
